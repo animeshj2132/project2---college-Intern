@@ -13,7 +13,7 @@ const collegeSchema = new mongoose.Schema({
         trim: true
     },
     logoLink:{
-        type: URL,
+        type: String,
         required: "logoLink is mandatory",
         trim: true
     },
