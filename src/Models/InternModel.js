@@ -19,7 +19,22 @@ const internSchema = new mongoose.Schema({
         type: Number,
         required: 'mobile  number is mandatory',
         unique: true,
-        trim: true
+        trim: true,
+        validate:{
+            validator: function (mobile)
+        {
+          const phoneno = /^\d{10}$/;
+          if((mobile.value.matc(phoneno)))
+                {
+              return true;
+                }
+              else
+                {
+                alert("Enter Valid mobile number");
+                return false;
+                }
+        }
+        }
      },
      collegeID:{
         type: ObjectId,
