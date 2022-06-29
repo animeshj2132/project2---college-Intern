@@ -19,9 +19,10 @@ const validBody = function (value) {
 
 const CollegeIdPresent = function (ObjectId) {
 
-    return mongoose.Types.ObjectId.validBody(ObjectId)
+//     return mongoose.Types.ObjectId.validBody(ObjectId)
+// }
+     // if(!CollegeIdPresent(collegeId)){return res.status(400).send({ status: false, message: "enter valid college id" })}
 }
-
 
 const validRequest = function (data) {
     return Object.keys(data).length > 0
@@ -31,7 +32,7 @@ const createIntern = async (req, res) => {
    try{ 
     let data = req.body
     let {name, email, mobile, collegeId} = data
-    
+        
         //check required fields
         if(!validRequest(data)){return res.status(400).send({ status: false, message: "required details (name, email, mobile, collegeId) are missing" })}
 
@@ -46,27 +47,27 @@ const createIntern = async (req, res) => {
         
 
         //ID not valid
-        if(!CollegeIdPresent(collegeId)){return res.status(400).send({ status: false, message: "enter valid college id" })}
-
         if(collegeId.length != 24){return res.status(400).send({ status: false, message: "enter valid college id" })}
-        let collegeID = await collegeModel.findById(collegeId)
-        //ID is not in db
+
+    //ID check in db
+    let collegeID = await collegeModel.findById(collegeId)
         if(!collegeID){return res.status(400).send({ status: false, message: "collegeId is not present" })}
 
-        //validations
-    let validate = emailValidator.validate(data.email);
-        if (validate == false){
-            return res.status(400).send({status:false, msg: "You have entered an invalid email address!" })}
-
-    let nameValidate = validator.isAlpha(data.name);
+    //validations
+    let nameValidate = validator.isAlpha(data.name); //validator use
         if (nameValidate == false){
             return res.status(400).send({status:false, msg: "name must be between A-Z or a-z " })}
 
+    let validate = emailValidator.validate(data.email); //emailValidator use
+        if (validate == false){
+            return res.status(400).send({status:false, msg: "You have entered an invalid email address!" })}
+
+
     let checkIntern= await internModel.findOne({email:email})
-      if(checkIntern){return res.status(400).send({status:false,msg:"this email is already in use"})}
+        if(checkIntern){return res.status(400).send({status:false,msg:"this email is already in use"})}
     
-     let mobileValidation = function validatePhoneNumber(mobile) {
-        var re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+    let mobileValidation = function validatePhoneNumber(mobile) {
+        var re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/; //regex validator
       
         return re.test(mobile);
       }
@@ -88,48 +89,4 @@ const createIntern = async (req, res) => {
 
 module.exports.createIntern = createIntern
 
-    // if (Object.keys(data).length == 0){
-    // return res.status(400).send({status:false, msg: "Object can not be empty" })
-    // }
-
-        
-    // // if(collegeId != 24){
-    // //     return res.status(400).send({status: false, msg: "collegeId is invalid"})
-    
-    // if (!collegeID) {
-    //     return res.status(404).send({status:false, msg: "College does not exist" })
-    // }
-    
-    // if (!("name" in data) || !("email" in data) || !("mobile" in data)) {
-    //     return res.status(422).send({status:false, msg: "required fields missing (title,body,authorId,category)" })
-    // }
-    
-    // // let type = typeof data
-    // // if (type == "object")
-    // //   return res.status(400).send({status:false, msg: "input data can not be null" });
-    // //  if(type !="string" )
-    // //  return res.status(400).send({status:false,msg:"input data must be string"}) 
-    // // if (data.toLowerCase() == "undefined")
-    // //   return res.status(400).send({status:false, msg: "input data can not be undefined" });
-
-
-    // if (
-    //     data.collegeId.trim() == "" ||
-    //     data.name.trim() == "" ||
-    //     data.email.trim() == "" ||
-    //     data.mobile.trim()  == ""
-    //   ) {
-    //     return res.status(400).send({status:false, msg: "required fields(name, email, mobile, collegeId) can not be empty"})
-    //   }
-
-    //   let nameValidate = validator.isAlpha(data.name);
-    //   if (nameValidate == false)
-    //   return res
-    //     .status(400)
-    //     .send({status:false, msg: "name must be between A-Z or a-z " });
-
-    //   let validate = emailValidator.validate(data.email);
-    //   if (validate == false){
-    //     return res.status(400).send({status:false, msg: "You have entered an invalid email address!" })
-    //   }
-     
+  
