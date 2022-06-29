@@ -31,7 +31,22 @@ const createColleges = async function (req, res) {
         if (!isValid(fullName)) return res.status(400).send({ status: false, message: "please provide Full Name" })
         if(!nameValidator(fullName)) return res.status(400).send({status: false , message: "Enter a valid full Name"})
         if (!isValid(logoLink)) return res.status(400).send({ status: false, message: "please provide Logo Link" })
-        if (!regxUrlValidator(logoLink)) return res.status(400).send({ status: false, message: "please provide valid url" })
+        // if (!regxUrlValidator(logoLink)) return res.status(400).send({ status: false, message: "please provide valid url" })
+        longUrl=logoLink.trim()
+        if (!(longUrl.includes('//'))) {
+            return res.status(400).send({status:false,msg:'Invalid longUrl'})
+        }
+        const urlParts=longUrl.split('//')
+        const scheme=urlParts[0]
+        const uri=urlParts[1]
+
+
+        if (!(uri.includes('.'))) {
+            return res.status(400).send({status:false,msg:'Invalid longUrl'})
+        }
+        const uriParts=uri.split('.')
+        if (!((scheme==='http:' || scheme==='https:') && (uriParts[0].trim().length) && (uriParts[1].trim().length))) {
+            return res.status(400).send({status:false,msg:'Invalid longUrl'})}
  
         let checkName = await collegeModel.findOne({name : name})
         if(checkName) return res.status(409).send({status : false , message: "The name is already registered, provide different name"})

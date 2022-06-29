@@ -79,7 +79,6 @@ const createIntern = async (req, res) => {
         if (checkIntern1) { return res.status(400).send({ status: false, msg: "this mobile number is already in use" }) }
 
         let collegeData = { name: name, email: email, mobile: mobile, collegeId: college._id.toString() }
-        console.log(collegeData)
         let savedData = await internModel.create(collegeData)
         res.status(201).send({ status: true, data: savedData })
     }
