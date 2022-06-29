@@ -54,9 +54,11 @@ const createIntern = async (req, res) => {
         if(!collegeID){return res.status(400).send({ status: false, message: "collegeId is not present" })}
 
     //validations
-    let nameValidate = validator.isAlpha(data.name); //validator use
-        if (nameValidate == false){
-            return res.status(400).send({status:false, msg: "name must be between A-Z or a-z " })}
+    let nameValidator = function(data){
+        let regx = /^[a-zA-z]+([\s][a-zA-Z\,]+)*$/;
+        return regx.test(data);
+    }
+    if(!nameValidator(name)) return res.status(400).send({status: false , message: "name should be between A=Z or a-z"})
 
     let validate = emailValidator.validate(data.email); //emailValidator use
         if (validate == false){
