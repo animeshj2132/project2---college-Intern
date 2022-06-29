@@ -17,10 +17,10 @@ const validBody = function (value) {
 
 }
 
-// const CollegeIdPresent = function (ObjectId) {
+const CollegeIdPresent = function (ObjectId) {
 
-//     return mongoose.Types.ObjectId.validBody(ObjectId)
-// }
+    return mongoose.Types.ObjectId.validBody(ObjectId)
+}
 
 
 const validRequest = function (data) {
@@ -31,7 +31,7 @@ const createIntern = async (req, res) => {
    try{ 
     let data = req.body
     let {name, email, mobile, collegeId} = data
-    let collegeID = await collegeModel.findById(collegeId)
+    
         //check required fields
         if(!validRequest(data)){return res.status(400).send({ status: false, message: "required details (name, email, mobile, collegeId) are missing" })}
 
@@ -43,11 +43,13 @@ const createIntern = async (req, res) => {
 
         if(!validBody(collegeId)){return res.status(400).send({ status: false, message: "enter the collegeId" })}
 
+        
+
         //ID not valid
-        // if(!CollegeIdPresent(collegeId)){return res.status(400).send({ status: false, message: "enter valid college id" })}
+        if(!CollegeIdPresent(collegeId)){return res.status(400).send({ status: false, message: "enter valid college id" })}
 
-        // if(collegeId.length != 24){return res.status(400).send({ status: false, message: "enter valid college id" })}
-
+        if(collegeId.length != 24){return res.status(400).send({ status: false, message: "enter valid college id" })}
+        let collegeID = await collegeModel.findById(collegeId)
         //ID is not in db
         if(!collegeID){return res.status(400).send({ status: false, message: "collegeId is not present" })}
 
