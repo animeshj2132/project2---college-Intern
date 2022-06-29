@@ -27,6 +27,12 @@ const createColleges = async function (req, res) {
         if (!regxUrlValidator(logoLink)) return res.status(400).send({ status: false, message: "please provide valid url" })
         let checkName = await collegeModel.findOne({name : name})
         if(checkName) return res.status(409).send({status : false , message: "The name is already registered, provide different name"})
+        
+        // let nameValidate = validate.isAlpha(req.body.name);
+        // let fullNameValidate = validate.isAlpha(req.body.fullName);
+    
+        // if (nameValidate == false || fullNameValidate == false)
+        //   return res.status(400).send({status:false, msg: "name and fullName must be between A-Z or a-z " });
         let data = req.body
         let newCollege = await collegeModel.create(data)
         res.status(201).send({ status: true, data: newCollege })
