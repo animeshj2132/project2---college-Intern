@@ -65,7 +65,7 @@ const createIntern = async (req, res) => {
 
 
         let checkIntern = await internModel.findOne({ email: email })
-        if (checkIntern) { return res.status(400).send({ status: false, msg: "this email is already in use" }) }
+        if (checkIntern) { return res.status(409).send({ status: false, msg: "this email is already in use" }) }
 
         let mobileValidation = function validatePhoneNumber(mobile) {
             var re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/; //regex validator
@@ -76,7 +76,7 @@ const createIntern = async (req, res) => {
         if (!mobileValidation(mobile)) { return res.status(400).send({ status: false, msg: "enter valid mobile number" }) }
 
         let checkIntern1 = await internModel.findOne({ mobile: mobile })
-        if (checkIntern1) { return res.status(400).send({ status: false, msg: "this mobile number is already in use" }) }
+        if (checkIntern1) { return res.status(409).send({ status: false, msg: "this mobile number is already in use" }) }
 
         let collegeData = { name: name, email: email, mobile: mobile, collegeId: college._id.toString() }
         let savedData = await internModel.create(collegeData)
