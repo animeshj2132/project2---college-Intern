@@ -17,12 +17,12 @@ const validBody = function (value) {
 
 }
 
-const CollegeIdPresent = function (ObjectId) {
+// const CollegeIdPresent = function (ObjectId) {
 
-    //     return mongoose.Types.ObjectId.validBody(ObjectId)
-    // }
-    // if(!CollegeIdPresent(collegeId)){return res.status(400).send({ status: false, message: "enter valid college id" })}
-}
+//     //     return mongoose.Types.ObjectId.validBody(ObjectId)
+//     // }
+//     // if(!CollegeIdPresent(collegeId)){return res.status(400).send({ status: false, message: "enter valid college id" })}
+// }
 
 let nameValidator = function (data) {
     let regx = /^[a-zA-z]+([\s][a-zA-Z\,]+)*$/;
