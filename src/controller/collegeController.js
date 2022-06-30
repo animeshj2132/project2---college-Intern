@@ -77,7 +77,10 @@ const collegeDetails = async function(req,res){
                     logoLink: college.logoLink
                 }
                 let interns = await internModel.find({collegeId: college.id, isDeleted: false})
-                if(interns){
+                if(interns.length == 0){
+                    collegeData.interns = " No interns related to this college"
+                }
+                if(interns.length > 0){
                     collegeData.interns = interns
                 }
                 res.status(200).send({status:true, data: collegeData})
