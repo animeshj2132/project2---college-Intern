@@ -18,7 +18,7 @@ let nameValidator = function(data){
 }
 
 const regxUrlValidator = function (url) {
-    let regx = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+    let regx = /^(https)\:\/\/[a-z0-9][a-z0-9-.]*s3\.[a-z][a-z0-9-.]*amazonaws\.com\/[a-z][a-z0-9./]*$/
     return regx.test(url)
 }
 
@@ -31,22 +31,22 @@ const createColleges = async function (req, res) {
         if (!isValid(fullName)) return res.status(400).send({ status: false, message: "please provide Full Name" })
         if(!nameValidator(fullName)) return res.status(400).send({status: false , message: "Enter a valid full Name"})
         if (!isValid(logoLink)) return res.status(400).send({ status: false, message: "please provide Logo Link" })
-        // if (!regxUrlValidator(logoLink)) return res.status(400).send({ status: false, message: "please provide valid url" })
-        longUrl=logoLink.trim()
-        if (!(longUrl.includes('//'))) {
-            return res.status(400).send({status:false,msg:'Invalid longUrl'})
-        }
-        const urlParts=longUrl.split('//')
-        const scheme=urlParts[0]
-        const uri=urlParts[1]
+        if (!regxUrlValidator(logoLink)) return res.status(400).send({ status: false, message: "please provide valid s3 link" })
+        // longUrl=logoLink.trim()
+        // if (!(longUrl.includes('//'))) {
+        //     return res.status(400).send({status:false,msg:'Invalid longUrl'})
+        // }
+        // const urlParts=longUrl.split('//')
+        // const scheme=urlParts[0]
+        // const uri=urlParts[1]
 
 
-        if (!(uri.includes('.'))) {
-            return res.status(400).send({status:false,msg:'Invalid longUrl'})
-        }
-        const uriParts=uri.split('.')
-        if (!((scheme==='http:' || scheme==='https:') && (uriParts[0].trim().length) && (uriParts[1].trim().length))) {
-            return res.status(400).send({status:false,msg:'Invalid longUrl'})}
+        // if (!(uri.includes('.'))) {
+        //     return res.status(400).send({status:false,msg:'Invalid longUrl'})
+        // }
+        // const uriParts=uri.split('.')
+        // if (!((scheme==='http:' || scheme==='https:') && (uriParts[0].trim().length) && (uriParts[1].trim().length))) {
+        //     return res.status(400).send({status:false,msg:'Invalid longUrl'})}
  
         let checkName = await collegeModel.findOne({name : name})
         if(checkName) return res.status(409).send({status : false , message: "The name is already registered, provide different name"})
@@ -76,7 +76,7 @@ const collegeDetails = async function(req,res){
                     fullName: college.fullName,
                     logoLink: college.logoLink
                 }
-                let interns = await internModel.find({collegeId: college.id, isDeleted: false})
+                let interns = await internModel.find({collegeId: college.id, isDeleted: false}).select({name:1 , mobile:1 , email:1})
                 if(interns.length == 0){
                     collegeData.interns = " No interns related to this college"
                 }
