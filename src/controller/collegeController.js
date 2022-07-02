@@ -24,16 +24,25 @@ let nameValidator = function(data){
 
 const createColleges = async function (req, res) {
     try {
+        res.setHeader("Acess-Control-Allow-Origin", "*")
         let data = req.body
 
         if (!bodyValidator(req.body)) return res.status(400).send({ status: false, message: "please provide details" })
+        
         const { name, fullName, logoLink } = req.body
+        
         if (!isValid(name)) return res.status(400).send({ status: false, message: "please provide Name" })
+        
         if(!nameValidator(name)) return res.status(400).send({status: false , message: "Enter a valid name"})
+        
         if (!isValid(fullName)) return res.status(400).send({ status: false, message: "please provide Full Name" })
+        
         if(!nameValidator(fullName)) return res.status(400).send({status: false , message: "Enter a valid full Name"})
+        
         if (!isValid(logoLink)) return res.status(400).send({ status: false, message: "please provide Logo Link" })
+        
         // if (!regxUrlValidator(logoLink)) return res.status(400).send({ status: false, message: "please provide valid s3 link" })
+        
         longUrl=logoLink.trim()
         if (!(longUrl.includes('//'))) {
             return res.status(400).send({status:false,msg:'Invalid longUrl'})
@@ -41,7 +50,6 @@ const createColleges = async function (req, res) {
         const urlParts=longUrl.split('//')
         const scheme=urlParts[0]
         const uri=urlParts[1]
-
 
         if (!(uri.includes('.'))) {
             return res.status(400).send({status:false,msg:'Invalid longUrl'})
@@ -72,6 +80,7 @@ const createColleges = async function (req, res) {
 
 const collegeDetails = async function(req,res){
     try{
+        res.setHeader("Acess-Control-Allow-Origin", "*")
         let name = req.query.collegeName
         if(name){
             let college = await collegeModel.findOne({name: name, isDeleted: false})
